@@ -1,4 +1,4 @@
-import * as mod from "./wasm.js";
+import * as mod from "./dqw_wasm.js";
 (async () => {
     await mod.default();
     var app = new Vue({
@@ -14,11 +14,6 @@ import * as mod from "./wasm.js";
         csv: null
       },
       mounted: function(){
-        /*
-        axios.get("./monster.json").then(
-            response => ( this.monsters = response.data )
-        );
-        */
         axios.get("./monster.csv").then(
           response => ( this.csv = response.data )
         );

@@ -96,6 +96,11 @@ impl Monsters {
     pub fn add_monster(&mut self, m: Monster){
         self.monsters.push(m);
     }
+
+    pub fn ret_monster(&mut self,i: usize) -> &mut String {
+        &mut self.monsters[i].name
+    }
+
 }
 
 #[derive(Clone, Serialize, Deserialize)]
