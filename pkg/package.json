@@ -1,0 +1,12 @@
+{
+  "name": "dqw-wasm",
+  "version": "0.1.0",
+  "files": [
+    "dqw_wasm_bg.wasm",
+    "dqw_wasm.js",
+    "dqw_wasm.d.ts"
+  ],
+  "module": "dqw_wasm.js",
+  "types": "dqw_wasm.d.ts",
+  "sideEffects": false
+}

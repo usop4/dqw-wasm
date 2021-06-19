@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <title>dqw match finder</title>
+
+    <link type="text/css" rel="stylesheet" href="//unpkg.com/bootstrap/dist/css/bootstrap.min.css" />
+    <link type="text/css" rel="stylesheet" href="//unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.min.css" />
+    <style>
+      .vertical {
+        writing-mode: vertical-rl;
+      }
+      #chart {
+        width: 100%;
+        height: 100%;
+      }
+      .u-pre-wrap {
+        white-space: pre-wrap;
+      }
+    </style>
+  </head>
+  <body>
+
+    <div class="container" id="app">
+
+      <h1>dqw match finder</h1>
+
+      <div class="row mb-3">
+
+        <div class="col-md-2 themed-grid-col" id="sticky-sidebar">
+          <div class="sticky-top">
+    
+
+            <div class="form-check">
+              <input value="戦士" v-model="job" class="form-check-input" type="radio" name="job" id="j1" checked>
+              <label class="form-check-label" for="j1">戦士</label>
+            </div>
+            <div class="form-check">
+              <input value="魔法使い" v-model="job" class="form-check-input" type="radio" name="job" id="j2">
+              <label class="form-check-label" for="j2">魔法使い</label>
+            </div>
+            <div class="form-check">
+              <input value="僧侶" v-model="job" class="form-check-input" type="radio" name="job" id="j3">
+              <label class="form-check-label" for="j3">僧侶</label>
+            </div>
+            <div class="form-check">
+              <input value="武闘家" v-model="job" class="form-check-input" type="radio" name="job" id="j4">
+              <label class="form-check-label" for="j4">武闘家</label>
+            </div>
+            <div class="form-check">
+              <input value="盗賊" v-model="job" class="form-check-input" type="radio" name="job" id="j5">
+              <label class="form-check-label" for="j5">盗賊</label>
+            </div>
+            <div class="form-check">
+              <input value="遊び人" v-model="job" class="form-check-input" type="radio" name="job" id="j11">
+              <label class="form-check-label" for="j11">遊び人</label>
+            </div>
+            <div class="form-check">
+              <input value="踊り子" v-model="job" class="form-check-input" type="radio" name="job" id="j12">
+              <label class="form-check-label" for="j12">踊り子</label>
+            </div>
+            <div class="form-check">
+              <input value="レンジャー" v-model="job" class="form-check-input" type="radio" name="job" id="j6">
+              <label class="form-check-label" for="j6">レンジャー</label>
+            </div>
+            <div class="form-check">
+              <input value="賢者" v-model="job" class="form-check-input" type="radio" name="job" id="j7">
+              <label class="form-check-label" for="j7">賢者</label>
+            </div>
+            <div class="form-check">
+              <input value="バトルマスター" v-model="job" class="form-check-input" type="radio" name="job" id="j8">
+              <label class="form-check-label" for="j8">バトルマスター</label>
+            </div>
+            <div class="form-check">
+              <input value="魔法戦士" v-model="job" class="form-check-input" type="radio" name="job" id="j9">
+              <label class="form-check-label" for="j9">魔法戦士</label>
+            </div>
+            <div class="form-check">
+              <input value="パラディン" v-model="job" class="form-check-input" type="radio" name="job" id="j10">
+              <label class="form-check-label" for="j10">パラディン</label>
+            </div>
+            <div class="form-check">
+              <input value="スパスタ" v-model="job" class="form-check-input" type="radio" name="job" id="j11">
+              <label class="form-check-label" for="j11">スパスタ</label>
+            </div>
+            <div class="form-check">
+              <input value="海賊" v-model="job" class="form-check-input" type="radio" name="job" id="j12">
+              <label class="form-check-label" for="j12">海賊</label>
+            </div>
+
+            <div>
+              <label for="range-1">コスト {{ cost }}</label>
+              <b-form-input id="range-1" v-model="cost" type="range" min="100" max="400"></b-form-input>
+              <b-button-group size="sm">
+                <b-button v-on:click="set_cost(-10)">-10</b-button>
+                <b-button v-on:click="set_cost(-1)">-1</b-button>
+                <b-button v-on:click="set_cost(+1)">+1</b-button>
+                <b-button v-on:click="set_cost(+10)">+10</b-button>
+              </b-button-group>          
+            </div>
+
+            <div>
+              <label for="range-2">表示数 {{ combis_size }}</label>
+              <b-form-input id="range-2" v-model="combis_size" type="range" min="1" max="100"></b-form-input>
+              <b-button-group size="sm">
+                <b-button v-on:click="set_combis_size(3)">3</b-button>
+                <b-button v-on:click="set_combis_size(10)">10</b-button>
+                <b-button v-on:click="set_combis_size(100)">100</b-button>
+              </b-button-group>          
+            </div>
+
+            <div>
+              <img alt="GitHub forks" src="https://img.shields.io/github/forks/usop4/dqw_match_finder?style=social">
+              <img alt="GitHub Repo stars" src="https://img.shields.io/github/stars/usop4/dqw_match_finder?style=social">
+            </div>
+          </div>
+        </div>
+
+
+        <div class="col-md-10 themed-grid-col" id="main">
+          <table class="table table-sm table-bordered">
+            <thead>
+              <tr>
+                <th><span class="vertical">コスト</span></th>
+                <th><span class="vertical">ＨＰ</span></th>
+                <th><span class="vertical">ＭＰ</span></th>
+                <th><span class="vertical">ちから</span></th>
+                <th><span class="vertical">みのまもり</span></th>
+                <th><span class="vertical">こうげき魔力</span></th>
+                <th><span class="vertical">かいふく魔力</span></th>
+                <th><span class="vertical">すばやさ</span></th>
+                <th><span class="vertical">きようさ</span></th>
+                <th><b-form-input v-model="remove" placeholder="除外するモンスター"></b-form-input></th>
+                <th>特殊効果</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><span><input value="cost" v-model="param" type="radio"></span></td>
+                <td><input value="hp" v-model="param" type="radio"></td>
+                <td><input value="mp" v-model="param" type="radio"></td>
+                <td><input value="power" v-model="param" type="radio"></td>
+                <td><input value="defense" v-model="param" type="radio"></td>
+                <td><input value="attack" v-model="param" type="radio"></td>
+                <td><input value="recover" v-model="param" type="radio"></td>
+                <td><input value="speed" v-model="param" type="radio"></td>
+                <td><input value="skill" v-model="param" type="radio"></td>
+                <td></td>
+                <td></td>
+              </tr>
+              <tr v-for="(combi,i) in listCombisCsv()" v-on:click="test(i)">
+                <td>{{ combi.cost }}</td>
+                <td>{{ combi.hp }}</td>
+                <td>{{ combi.mp }}</td>
+                <td>{{ combi.power }}</td>
+                <td>{{ combi.defense }}</td>
+                <td>{{ combi.attack }}</td>
+                <td>{{ combi.recover }}</td>
+                <td>{{ combi.speed }}</td>
+                <td>{{ combi.skill }}</td>
+                <td style="white-space: pre;">{{ combi.name }}</td>
+                <td>
+                  <div class="u-pre-wrap">{{ combi.effects }}</div>
+                </td>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    <script src="//unpkg.com/vue@latest/dist/vue.min.js"></script>
+    <script src="//unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.min.js"></script>
+    <script src="//unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue-icons.min.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="index.js" type="module"></script>
+    <script>
+      const log = (val) => {
+        console.log(val);
+      }
+      const test = (val) => {
+        console.log(val);
+      }
+    </script>
+</body>
+</html>
