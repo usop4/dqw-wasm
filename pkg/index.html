@@ -92,22 +92,37 @@
 
             <div>
               <label for="range-1">コスト {{ cost }}</label>
-              <b-form-input id="range-1" v-model="cost" type="range" min="100" max="400"></b-form-input>
-              <b-button-group size="sm">
-                <b-button v-on:click="set_cost(-10)">-10</b-button>
-                <b-button v-on:click="set_cost(-1)">-1</b-button>
-                <b-button v-on:click="set_cost(+1)">+1</b-button>
-                <b-button v-on:click="set_cost(+10)">+10</b-button>
-              </b-button-group>          
+              <div>
+                <b-form-input id="range-1" v-model="cost" type="range" min="100" max="500"></b-form-input>
+              </div>
+              <div>
+                <b-button-group size="sm">
+                <b-button v-on:click="set_cost(100)">100</b-button>
+                <b-button v-on:click="set_cost(200)">200</b-button>
+                <b-button v-on:click="set_cost(300)">300</b-button>
+                <b-button v-on:click="set_cost(400)">400</b-button>
+                </b-button-group>          
+              </div>
+              <div>
+                <b-button-group size="sm">
+                <b-button v-on:click="add_cost(-10)">-10</b-button>
+                <b-button v-on:click="add_cost(-1)">-1</b-button>
+                <b-button v-on:click="add_cost(+1)">+1</b-button>
+                <b-button v-on:click="add_cost(+10)">+10</b-button>
+                </b-button-group>
+              </div>
             </div>
 
             <div>
               <label for="range-2">表示数 {{ combis_size }}</label>
-              <b-form-input id="range-2" v-model="combis_size" type="range" min="1" max="100"></b-form-input>
+              <div>
+                <b-form-input id="range-2" v-model="combis_size" type="range" min="1" max="100"></b-form-input>
+              </div>
               <b-button-group size="sm">
-                <b-button v-on:click="set_combis_size(3)">3</b-button>
+                <b-button v-on:click="set_combis_size(1)">1</b-button>
+                <b-button v-on:click="set_combis_size(5)">5</b-button>
                 <b-button v-on:click="set_combis_size(10)">10</b-button>
-                <b-button v-on:click="set_combis_size(100)">100</b-button>
+                <b-button v-on:click="set_combis_size(20)">20</b-button>
               </b-button-group>          
             </div>
 
@@ -146,7 +161,7 @@
                 <td></td>
                 <td></td>
               </tr>
-              <tr v-for="(combi,i) in listCombisCsv()" v-on:click="test(i)">
+              <tr v-for="(combi,i) in list_combis()" v-on:click="show_combis(i)">
                 <td>{{ combi.cost }}</td>
                 <td>{{ combi.hp }}</td>
                 <td>{{ combi.mp }}</td>
@@ -165,6 +180,17 @@
         </div>
       </div>
 
+      <div>
+        <b-modal id="modal-1">
+          <p class="my-4">{{ remove_monster_1 }}<b-button size="sm" v-on:click="remove_monster(1)">remove</b-button></p>
+          <p class="my-4">{{ remove_monster_2 }}<b-button size="sm" v-on:click="remove_monster(2)">remove</b-button></p>
+          <p class="my-4">{{ remove_monster_3 }}<b-button size="sm" v-on:click="remove_monster(3)">remove</b-button></p>
+          <p class="my-4">{{ remove_monster_4 }}<b-button size="sm" v-on:click="remove_monster(4)">remove</b-button></p>
+        </b-modal>
+      </div>
+
+    </div>
+
     <script src="//unpkg.com/vue@latest/dist/vue.min.js"></script>
     <script src="//unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.min.js"></script>
     <script src="//unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue-icons.min.js"></script>
@@ -172,9 +198,6 @@
     <script src="index.js" type="module"></script>
     <script>
       const log = (val) => {
-        console.log(val);
-      }
-      const test = (val) => {
         console.log(val);
       }
     </script>

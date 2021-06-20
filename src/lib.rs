@@ -35,7 +35,6 @@ pub struct Option {
 #[wasm_bindgen]
 pub fn return_all_combis2_csv(monsters: &str, options: &JsValue) -> JsValue {
 
-    log("return_all_combis2_csv");
     let o: Option = options.into_serde().unwrap();
     let mut m = Monsters::new();    
     let mut r = csv::ReaderBuilder::new().delimiter(b',').from_reader(monsters.as_bytes());
@@ -43,7 +42,6 @@ pub fn return_all_combis2_csv(monsters: &str, options: &JsValue) -> JsValue {
     let mut id :usize = 0;
     for record in r.records(){
         let record = record.unwrap();
-        log(&record[0]);
         m.add_monster(
             Monster {
                 id: id,
@@ -64,8 +62,6 @@ pub fn return_all_combis2_csv(monsters: &str, options: &JsValue) -> JsValue {
         id = id + 1;
     }
 
-    log("csv loaded");
-
     let mut combis = Combis::new();
     let mut combi = Combi::new();
 
@@ -83,7 +79,6 @@ pub fn return_all_combis2_csv(monsters: &str, options: &JsValue) -> JsValue {
             }
             counter +=  1;
         }
-        //remove_list.push(*i1);
         let mut list2 = make_num_array_from_color2(&m,color[0]);
         list2 = remove_array(list2,(*remove_list).to_vec());
         for i2 in &list2 {
@@ -131,8 +126,6 @@ pub fn return_all_combis2_csv(monsters: &str, options: &JsValue) -> JsValue {
         }
         remove_list.clear();
     }
-
-    log("combi generated");
 
     let mut out = Combis::new();
     let mut max = Vec::new();

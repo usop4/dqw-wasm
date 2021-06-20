@@ -7,11 +7,15 @@ import * as mod from "./dqw_wasm.js";
         monsters: null,
         combis: null,
         job: "賢者",
-        cost: 380,
+        cost: 400,
         param: "hp",
         remove: "",
-        combis_size: 3,
-        csv: null
+        combis_size: 5,
+        csv: null,
+        remove_monster_1: null,
+        remove_monster_2: null,
+        remove_monster_3: null,
+        remove_monster_4: null
       },
       mounted: function(){
         axios.get("./monster.csv").then(
@@ -19,7 +23,7 @@ import * as mod from "./dqw_wasm.js";
         );
     },
       methods:{
-        listCombisCsv: function(){
+        list_combis: function(){
           var param = {
             cost: parseInt(this.cost),
             job: this.job,
@@ -34,11 +38,31 @@ import * as mod from "./dqw_wasm.js";
           this.combis = s.combis;
           return s.combis;
         },
-        set_cost: function(n){
+        add_cost: function(n){
           this.cost = parseInt(this.cost) + parseInt(n);
+        },
+        set_cost: function(n){
+          this.cost = parseInt(n);
         },
         set_combis_size: function(n){
           this.combis_size = n;
+        },
+        show_combis: function(n){
+          console.log(this.combis[n]);
+          let remove_monsters = this.combis[n].name.split('\r\n');
+          this.remove_monster_1 = remove_monsters[0];
+          this.remove_monster_2 = remove_monsters[1];
+          this.remove_monster_3 = remove_monsters[2];
+          this.remove_monster_4 = remove_monsters[3];
+          this.$bvModal.show("modal-1");
+        },
+        remove_monster: function(n){
+          console.log(n);
+          if(n==1){this.remove = this.remove_monster_1.split('(')[0];}
+          if(n==2){this.remove = this.remove_monster_2.split('(')[0];}
+          if(n==3){this.remove = this.remove_monster_3.split('(')[0];}
+          if(n==4){this.remove = this.remove_monster_4.split('(')[0];}
+          this.$bvModal.hide("modal-1");
         },
         csvtest: function(event){
           console.log(this.csv);
