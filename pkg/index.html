@@ -25,13 +25,23 @@
 
     <div class="container" id="app">
 
-      <h1>dqw match finder</h1>
+      <h1>
+        dqw match finder
+      </h1>
 
       <div class="row mb-3">
 
         <div class="col-md-2 themed-grid-col" id="sticky-sidebar">
           <div class="sticky-top">
     
+            <div>
+              <b-form-checkbox
+                id="checkbox_1"
+                v-model="auto_update_checkbox"
+                value="accepted">
+                auto update
+              </b-form-checkbox>
+            </div>
 
             <div class="form-check">
               <input value="戦士" v-model="job" class="form-check-input" type="radio" name="job" id="j1" checked>
@@ -161,8 +171,8 @@
                 <td></td>
                 <td></td>
               </tr>
-              <tr v-for="(combi,i) in list_combis()" v-on:click="show_combis(i)">
-                <td>{{ combi.cost }}</td>
+              <tr v-for="(combi,i) in list_combis_auto()" v-on:click="show_combis(i)">
+                  <td>{{ combi.cost }}</td>
                 <td>{{ combi.hp }}</td>
                 <td>{{ combi.mp }}</td>
                 <td>{{ combi.power }}</td>
@@ -182,10 +192,10 @@
 
       <div>
         <b-modal id="modal-1">
+          <p class="my-4">{{ remove_monster_0 }}<b-button size="sm" v-on:click="remove_monster(0)">remove</b-button></p>
           <p class="my-4">{{ remove_monster_1 }}<b-button size="sm" v-on:click="remove_monster(1)">remove</b-button></p>
           <p class="my-4">{{ remove_monster_2 }}<b-button size="sm" v-on:click="remove_monster(2)">remove</b-button></p>
           <p class="my-4">{{ remove_monster_3 }}<b-button size="sm" v-on:click="remove_monster(3)">remove</b-button></p>
-          <p class="my-4">{{ remove_monster_4 }}<b-button size="sm" v-on:click="remove_monster(4)">remove</b-button></p>
         </b-modal>
       </div>
 

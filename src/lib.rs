@@ -35,7 +35,10 @@ pub struct Option {
 #[wasm_bindgen]
 pub fn return_all_combis2_csv(monsters: &str, options: &JsValue) -> JsValue {
 
+    log("return_all_combis");
+
     let o: Option = options.into_serde().unwrap();
+
     let mut m = Monsters::new();    
     let mut r = csv::ReaderBuilder::new().delimiter(b',').from_reader(monsters.as_bytes());
 
@@ -127,6 +130,8 @@ pub fn return_all_combis2_csv(monsters: &str, options: &JsValue) -> JsValue {
         remove_list.clear();
     }
 
+    log("list");
+
     let mut out = Combis::new();
     let mut max = Vec::new();
     for c in &combis.combis {
@@ -149,6 +154,8 @@ pub fn return_all_combis2_csv(monsters: &str, options: &JsValue) -> JsValue {
     max.reverse();
 
     let mut count = 0;
+    let mut remove_flag = 0;
+    let removes: Vec<&str> = o.remove.split(' ').collect();
 
     'outer: for i in 0..max.len() {
         for c in combis.combis.clone() {
@@ -166,12 +173,17 @@ pub fn return_all_combis2_csv(monsters: &str, options: &JsValue) -> JsValue {
                 _ => cval = 0
             }
             if cval == max[i] {
-                //log(&c.name);
                 if o.remove.len() > 0 {
-                    if !c.name.contains(&*o.remove) {
+                    for remove in &removes {     
+                        if c.name.contains(&*remove) {
+                            remove_flag = 1;
+                        }
+                    }
+                    if remove_flag == 0 {
                         out.add_combi(c);
                         count += 1;
-                    }    
+                    }
+                    remove_flag = 0;
                 }else{
                     out.add_combi(c);
                     count += 1;
@@ -182,6 +194,7 @@ pub fn return_all_combis2_csv(monsters: &str, options: &JsValue) -> JsValue {
             }
         }
     }
+    log("finish");
     JsValue::from_serde(&out).unwrap()
 }
 
