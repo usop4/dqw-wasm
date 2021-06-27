@@ -1,8 +1,3 @@
-/*
-https://qiita.com/jp_ibis/items/3205b4799cb567f8ebf5
-https://rustwasm.github.io/wasm-bindgen/reference/arbitrary-data-with-serde.html
-*/
-
 pub mod monster;
 pub mod job;
 
@@ -64,6 +59,8 @@ pub fn return_all_combis2_csv(monsters: &str, options: &JsValue) -> JsValue {
         );
         id = id + 1;
     }
+
+    log(&format!("monster:{:?}",id-1));
 
     let mut combis = Combis::new();
     let mut combi = Combi::new();
@@ -130,8 +127,6 @@ pub fn return_all_combis2_csv(monsters: &str, options: &JsValue) -> JsValue {
         remove_list.clear();
     }
 
-    log("list");
-
     let mut out = Combis::new();
     let mut max = Vec::new();
     for c in &combis.combis {
@@ -148,6 +143,8 @@ pub fn return_all_combis2_csv(monsters: &str, options: &JsValue) -> JsValue {
             _ => ()
         }
     }
+
+    log(&format!("size:{:?}",max.len()));
 
     max.sort();
     max.dedup();

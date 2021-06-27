@@ -1,5 +1,7 @@
 use serde::{Serialize, Deserialize};
 
+use std::collections::HashMap;
+
 #[derive(Clone, Serialize, Deserialize)]
 pub struct Attr {
     pub tokugi: usize,
@@ -149,20 +151,20 @@ impl Combi{
     }
 
     pub fn add_effects(&mut self, effects: &str){
-        if self.effects.len() == 0 {
-            self.effects = effects.replace(" ","\r\n").to_string();
-        }else{
-            self.effects = format!("{}\r\n{}",&self.effects,&effects.replace(" ","\r\n").to_string());
+        if effects.len() > 1 {
+            if self.effects.len() == 0 {
+                self.effects = effects.replace(" ","\r\n").to_string();
+            }else{
+                self.effects = format!("{}\r\n{}",&self.effects,&effects.replace(" ","\r\n").to_string());
+            }
         }
     }
 
     pub fn add_monster(&mut self, m: Monster){
         
         if self.name.len() == 0 {
-            //self.name = m.name;
             self.name = format!("{}({})",&m.name,&m.color);
         }else{
-            //self.name = format!("{}\r\n{}",&self.name,&m.name);
             self.name = format!("{}\r\n{}({})",&self.name,&m.name,&m.color);
         }
         self.cost = self.cost + m.cost;
@@ -176,8 +178,38 @@ impl Combi{
         self.skill = self.skill + m.skill;
 
         self.add_effects(&m.effects);
+        self.compress_effects();
     }
 
+    pub fn compress_effects(&mut self){
+        let src = &self.effects;
+        let mut map = HashMap::<String, usize>::new();    
+        let mut out = "".to_string();
+        for s in src.split("\r\n"){
+            let kv: Vec<&str> = s.split("+").collect();
+            let key = kv[0].to_string();
+            if kv.len() == 1 {                
+                if key.len() > 0 {
+                    if out.len() == 0 {
+                        out = key;
+                    }else{
+                        out = format!("{}\r\n{}",&out,&key);
+                    }
+                }
+            }else{
+                *map.entry(key).or_insert(0) += kv[1].replace("%","").parse().unwrap_or(0);
+            }        
+        }
+        for(k,v) in &map {
+            if out.len() == 0 {
+                out = format!("{}+{:?}",k,v);
+            }else{
+                out = format!("{}\r\n{}",&out,&format!("{}+{:?}",k,v));
+            }
+        }
+        self.effects = out;
+    }
+    
 }
 
 #[derive(Serialize, Deserialize)]
