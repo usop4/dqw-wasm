@@ -9,10 +9,6 @@ export function initialize(): void;
 * @returns {any}
 */
 export function return_all_combis2_csv(monsters: string, options: any): any;
-/**
-* @param {string} data
-*/
-export function kmean_test(data: string): void;
 
 export type InitInput = RequestInfo | URL | Response | BufferSource | WebAssembly.Module;
 
@@ -20,10 +16,8 @@ export interface InitOutput {
   readonly memory: WebAssembly.Memory;
   readonly initialize: () => void;
   readonly return_all_combis2_csv: (a: number, b: number, c: number) => number;
-  readonly kmean_test: (a: number, b: number) => void;
   readonly __wbindgen_malloc: (a: number) => number;
   readonly __wbindgen_realloc: (a: number, b: number, c: number) => number;
-  readonly __wbindgen_exn_store: (a: number) => void;
   readonly __wbindgen_free: (a: number, b: number) => void;
   readonly __wbindgen_start: () => void;
 }

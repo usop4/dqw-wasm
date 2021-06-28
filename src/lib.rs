@@ -10,9 +10,6 @@ use crate::job::*;
 extern crate console_error_panic_hook;
 use std::panic;
 
-use kmeans::*;
-extern crate rand;
-
 #[wasm_bindgen(start)]
 pub fn initialize() {
     panic::set_hook(Box::new(console_error_panic_hook::hook));
@@ -30,7 +27,7 @@ pub struct Option {
 #[wasm_bindgen]
 pub fn return_all_combis2_csv(monsters: &str, options: &JsValue) -> JsValue {
 
-    log("return_all_combis");
+    time("return_all_combis2_csv");
 
     let o: Option = options.into_serde().unwrap();
 
@@ -156,6 +153,7 @@ pub fn return_all_combis2_csv(monsters: &str, options: &JsValue) -> JsValue {
 
     'outer: for i in 0..max.len() {
         for c in combis.combis.clone() {
+            let mut c_clone = c.clone();
             let cval: usize;
             match &*o.param {
                 "cost" => cval = c.cost,
@@ -177,12 +175,14 @@ pub fn return_all_combis2_csv(monsters: &str, options: &JsValue) -> JsValue {
                         }
                     }
                     if remove_flag == 0 {
-                        out.add_combi(c);
+                        c_clone.compress_effects();
+                        out.add_combi(c_clone);
                         count += 1;
                     }
                     remove_flag = 0;
                 }else{
-                    out.add_combi(c);
+                    c_clone.compress_effects();
+                    out.add_combi(c_clone);
                     count += 1;
                 }
             }
@@ -191,77 +191,25 @@ pub fn return_all_combis2_csv(monsters: &str, options: &JsValue) -> JsValue {
             }
         }
     }
-    log("finish");
+    timeEnd("return_all_combis2_csv");
     JsValue::from_serde(&out).unwrap()
 }
-
-#[wasm_bindgen]
-pub fn kmean_test(data: &str) {
-
-    log("kmean_test");
-
-    let k = 16;
-    let max_iter = 10;
-
-    let sample_dims:usize = 8;
-    let mut sample_cnt:usize = 0;
-
-    let mut m = Monsters::new();
-    let mut r = csv::ReaderBuilder::new().delimiter(b',')
-        .has_headers(true)
-        .from_reader(data.as_bytes());
-
-    let mut samples: Vec<f64> = Vec::new();
-
-    for record in r.records(){
-        let record = record.unwrap();
-        m.add_monster(
-            Monster {
-                id: sample_cnt,
-                name: record[0].to_string(),
-                cost: record[1].parse().unwrap(),
-                color: record[2].to_string(),
-                hp: record[3].parse().unwrap(),
-                mp: record[4].parse().unwrap(),
-                power: record[5].parse().unwrap(),
-                defense: record[6].parse().unwrap(),
-                attack: record[7].parse().unwrap(),
-                recover: record[8].parse().unwrap(),
-                speed: record[9].parse().unwrap(),
-                skill: record[10].parse().unwrap(),
-                effects: record[11].to_string(),
-            }
-        );
-        log(&record[0].to_string());
-        for i in 3..11 {
-            samples.push(record[i].parse().unwrap());
-        }
-        sample_cnt = sample_cnt + 1;
-    }
-
-    log(&format!("sample_cnt: {:?}", sample_cnt));
-    log(&format!("sample_dims: {:?}", sample_dims));
-    log(&format!("samples.len(): {:?}", samples.len()));
-
-    let kmean = KMeans::new(samples, sample_cnt, sample_dims);
-    log("kmeans new");
-
-    //let result = kmean.kmeans_lloyd(k, max_iter, KMeans::init_random_sample, &KMeansConfig::default());
-    let result = kmean.kmeans_lloyd(k, max_iter, KMeans::init_kmeanplusplus, &KMeansConfig::default());
-    log("kmeans lloyd");
-
-    for i in 0..sample_cnt {
-        log(&format!("{},{:?}",m.ret_monster(i),result.assignments[i]));
-    }
-
-}
-
-
 
 #[wasm_bindgen]
 extern {
     pub fn log(s: &str);
 }
+
+#[wasm_bindgen]
+extern {
+    pub fn time(s: &str);
+}
+
+#[wasm_bindgen]
+extern {
+    pub fn timeEnd(s: &str);
+}
+
 
 #[cfg(test)]
 mod tests {
@@ -273,7 +221,7 @@ mod tests {
         let mut hash_map: HashMap<&str, i32> = HashMap::new();
         hash_map.insert("nju", 33);        
         assert_eq!(hash_map["nju"], 33);
-        }
+    }
 
 
     #[test]

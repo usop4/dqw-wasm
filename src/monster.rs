@@ -150,16 +150,6 @@ impl Combi{
         self.effects = String::new();
     }
 
-    pub fn add_effects(&mut self, effects: &str){
-        if effects.len() > 1 {
-            if self.effects.len() == 0 {
-                self.effects = effects.replace(" ","\r\n").to_string();
-            }else{
-                self.effects = format!("{}\r\n{}",&self.effects,&effects.replace(" ","\r\n").to_string());
-            }
-        }
-    }
-
     pub fn add_monster(&mut self, m: Monster){
         
         if self.name.len() == 0 {
@@ -177,15 +167,20 @@ impl Combi{
         self.speed = self.speed + m.speed;
         self.skill = self.skill + m.skill;
 
-        self.add_effects(&m.effects);
-        self.compress_effects();
+        if m.effects.len() > 1 {
+            if self.effects.len() == 0 {
+                self.effects = m.effects;
+            }else{
+                self.effects = format!("{} {}",&self.effects,&m.effects);
+            }
+        }
     }
 
     pub fn compress_effects(&mut self){
         let src = &self.effects;
         let mut map = HashMap::<String, usize>::new();    
         let mut out = "".to_string();
-        for s in src.split("\r\n"){
+        for s in src.split(" "){
             let kv: Vec<&str> = s.split("+").collect();
             let key = kv[0].to_string();
             if kv.len() == 1 {                
