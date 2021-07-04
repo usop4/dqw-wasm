@@ -153,9 +153,9 @@ impl Combi{
     pub fn add_monster(&mut self, m: Monster){
         
         if self.name.len() == 0 {
-            self.name = format!("{}({})",&m.name,&m.color);
+            self.name = format!("{}({}{})",&m.name,&m.color,&m.cost);
         }else{
-            self.name = format!("{}\r\n{}({})",&self.name,&m.name,&m.color);
+            self.name = format!("{}\r\n{}({}{})",&self.name,&m.name,&m.color,&m.cost);
         }
         self.cost = self.cost + m.cost;
         self.hp = self.hp + m.hp;
