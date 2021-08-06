@@ -11,7 +11,7 @@ extern crate console_error_panic_hook;
 use std::panic;
 
 #[wasm_bindgen(start)]
-pub fn initialize() {
+pub fn initialize(){
     panic::set_hook(Box::new(console_error_panic_hook::hook));
 }
 
@@ -67,6 +67,7 @@ pub fn return_all_combis2_csv(monsters: &str, options: &JsValue) -> JsValue {
 
     let mut remove_list : Vec<usize> = Vec::new();
     let list1 = make_num_array_from_monsters(&m);
+
     for i1 in &list1 {
         let mut counter = 0;
         loop {
