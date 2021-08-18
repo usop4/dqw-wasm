@@ -14,8 +14,7 @@ import * as mod from "./dqw_wasm.js";
         combis_size: 5,
         csv: null,
         monster_list: [],
-        auto_update_checkbox: "accepted",
-        options: [null,null,null,null,null]
+        show: false,
       },
       mounted: function(){
         axios.get("./monster.csv").then(
@@ -24,13 +23,16 @@ import * as mod from "./dqw_wasm.js";
       },
       computed:{
       },
+      watch: {
+        show: function(){
+          console.log(this.show);
+        }
+      },
       methods:{
         list_combis_auto: function(){
-          if(this.auto_update_checkbox){
-            return this.list_combis();
-          }
+          return this.combis;
         },
-        list_combis: function(){
+        async_list_combis:async function(){
           var param = {
             cost: parseInt(this.cost),
             job: this.job,
@@ -38,30 +40,19 @@ import * as mod from "./dqw_wasm.js";
             remove: this.remove,
             combis_size: parseInt(this.combis_size)
           };
-          if(this.options.slice(0,5).toString() == [this.cost,this.job,this.param,this.remove,this.combis_size].toString()){
-            return this.combis;
-          }else{
-            let s = mod.return_all_combis2_csv(
-              this.csv,
-              param
-            );
-            this.combis = s.combis;
-            this.options[0] = this.cost;
-            this.options[1] = this.job;  
-            this.options[2] = this.param;
-            this.options[3] = this.remove;  
-            this.options[4] = this.combis_size;
-            return s.combis;
-          }
+          let s = mod.return_all_combis2_csv(
+            this.csv,
+            param
+          );
+          this.combis = s.combis;
         },
-        add_cost: function(n){
-          this.cost = parseInt(this.cost) + parseInt(n);
+        list_combis:async function(val){
+          await this.set_show(true);
+          await this.async_list_combis();
+          this.set_show(false);
         },
-        set_cost: function(n){
-          this.cost = parseInt(n);
-        },
-        set_combis_size: function(n){
-          this.combis_size = n;
+        set_show:async function(val){
+          this.show = val;
         },
         show_combis: function(n){
           this.monster_list = this.combis[n].name.split('\r\n').map(value => value);
@@ -75,12 +66,6 @@ import * as mod from "./dqw_wasm.js";
           }
           this.$bvModal.hide("modal-1");
         },
-        csvtest: function(event){
-          console.log(this.csv);
-          mod.csv_test(this.csv);
-        },
       }
     })
 })();
-
-

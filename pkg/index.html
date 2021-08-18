@@ -9,12 +9,23 @@
     <link type="text/css" rel="stylesheet" href="//unpkg.com/bootstrap/dist/css/bootstrap.min.css" />
     <link type="text/css" rel="stylesheet" href="//unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.min.css" />
     <style>
-      .vertical {
-        writing-mode: vertical-rl;
+      body {
+        background-color: whitesmoke;
       }
-      #chart {
-        width: 100%;
-        height: 100%;
+      .container {
+        background-color: white;
+      }
+      table th{
+        position: -webkit-sticky;
+        position: sticky;
+        top: 0;
+        z-index: 1;
+        background-color: white;
+      }
+      .vertical {
+        -webkit-writing-mode: vertical-rl;
+        -ms-writing-mode: tb-rl;
+        writing-mode: vertical-rl;
       }
       .u-pre-wrap {
         white-space: pre-wrap;
@@ -24,27 +35,15 @@
   <body>
 
     <div class="container">
-
-      <h1>
-        dqw match finder
-      </h1>
+      <h1>dqw match finder</h1>
 
       <div id="app">
-
+        
         <div class="row mb-3">
 
           <div class="col-md-2 themed-grid-col" id="sticky-sidebar">
             <div class="sticky-top">
       
-              <div>
-                <b-form-checkbox
-                  id="checkbox_1"
-                  v-model="auto_update_checkbox"
-                  value="accepted">
-                  auto update
-                </b-form-checkbox>
-              </div>
-
               <div class="form-check">
                 <input value="戦士" v-model="job" class="form-check-input" type="radio" name="job" id="j1" checked>
                 <label class="form-check-label" for="j1">戦士</label>
@@ -103,45 +102,31 @@
               </div>
 
               <div>
-                <label for="range-1">コスト {{ cost }}</label>
-                <div>
-                  <b-form-input id="range-1" v-model="cost" type="range" min="100" max="500"></b-form-input>
-                </div>
-                <div>
-                  <b-button-group size="sm">
-                  <b-button v-on:click="set_cost(100)">100</b-button>
-                  <b-button v-on:click="set_cost(200)">200</b-button>
-                  <b-button v-on:click="set_cost(300)">300</b-button>
-                  <b-button v-on:click="set_cost(400)">400</b-button>
-                  </b-button-group>          
-                </div>
-                <div>
-                  <b-button-group size="sm">
-                  <b-button v-on:click="add_cost(-10)">-10</b-button>
-                  <b-button v-on:click="add_cost(-1)">-1</b-button>
-                  <b-button v-on:click="add_cost(+1)">+1</b-button>
-                  <b-button v-on:click="add_cost(+10)">+10</b-button>
-                  </b-button-group>
-                </div>
+                <label for="cost">コスト</label>
+                <b-form-input size="sm" id="cost" v-model="cost"></b-form-input>
               </div>
 
               <div>
-                <label for="range-2">表示数 {{ combis_size }}</label>
-                <div>
-                  <b-form-input id="range-2" v-model="combis_size" type="range" min="1" max="1000"></b-form-input>
-                </div>
-                <b-button-group size="sm">
-                  <b-button v-on:click="set_combis_size(10)">10</b-button>
-                  <b-button v-on:click="set_combis_size(100)">100</b-button>
-                  <b-button v-on:click="set_combis_size(1000)">1000</b-button>
-                </b-button-group>          
+                <label for="combis_size">表示数</label>
+                <b-form-group>
+                  <b-form-radio v-model="combis_size" value="5">5</b-form-radio>
+                  <b-form-radio v-model="combis_size" value="100">100</b-form-radio>
+                </b-form-group>
+              </div>
+
+              <div>
+                <b-button size="sm" v-on:click="list_combis()">
+                  計算
+                </b-button>
               </div>
 
             </div>
           </div>
 
           <div class="col-md-10 themed-grid-col">
-            <table class="table table-sm table-bordered">
+
+            <b-overlay :show="show" rounded="sm">
+            <table class="table">
               <thead>
                 <tr>
                   <th><span class="vertical">コスト</span></th>
@@ -156,8 +141,6 @@
                   <th>モンスター</th>
                   <th>特殊効果</th>
                 </tr>
-              </thead>
-              <tbody>
                 <tr>
                   <td><span><input value="cost" v-model="param" type="radio"></span></td>
                   <td><input value="hp" v-model="param" type="radio"></td>
@@ -168,9 +151,11 @@
                   <td><input value="recover" v-model="param" type="radio"></td>
                   <td><input value="speed" v-model="param" type="radio"></td>
                   <td><input value="skill" v-model="param" type="radio"></td>
-                  <td><b-form-input v-model="remove" placeholder="除外するモンスター"></b-form-input></td>
+                  <td><b-form-input size="sm" v-model="remove" placeholder="除外するモンスター"></b-form-input></td>
                   <td></td>
                 </tr>
+              </thead>
+              <tbody>
                 <tr v-for="(combi,i) in list_combis_auto()" v-on:click="show_combis(i)">
                   <td>{{ combi.cost }}</td>
                   <td>{{ combi.hp }}</td>
@@ -187,6 +172,7 @@
                   </td>
               </tbody>
             </table>
+            </b-overlay>
           </div>
         </div>
 
@@ -198,7 +184,23 @@
             </li>
           </b-modal>
         </div>
+
+        <div>
+          <b-button v-b-toggle.collapse-1 variant="outline-primary" size="sm">元データを編集</b-button>
+          <b-collapse id="collapse-1" class="mt-2">
+            <b-form-textarea
+              id="textarea"
+              v-model="csv"
+              placeholder="Enter something..."
+              rows="3"
+              max-rows="6"
+            ></b-form-textarea>
+          </b-collapse>
+        </div>  
+  
       </div>
+
+      <a href="https://github.com/usop4/dqw-wasm/">https://github.com/usop4/dqw-wasm/</a>
     </div>
 
     <script src="//unpkg.com/vue@latest/dist/vue.min.js"></script>
@@ -215,6 +217,7 @@
       }
       const timeEnd = (val) => {
         console.timeEnd(val);
+        document.querySelector('#app').__vue__.set_show(false);
       }
     </script>
 </body>
