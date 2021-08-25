@@ -2,46 +2,90 @@ use serde::{Serialize, Deserialize};
 
 use std::collections::HashMap;
 
-#[derive(Clone, Serialize, Deserialize)]
-pub struct Attr {
-    pub tokugi: usize,
-    pub jumon: usize,
-    pub taisei: usize, 
+#[derive(Copy, Serialize, Deserialize)]
+pub struct MonsterLite {
+    pub id: usize,
+    pub cost: usize,
+    pub color: usize,
+    pub val: usize,
 }
 
-impl Attr{
-    pub fn new() -> Self {
-        Attr{
-            tokugi: 0,
-            jumon: 0,
-            taisei: 0,    
+impl MonsterLite{
+    pub fn new(id: usize) -> Self {
+        MonsterLite {
+            id: id,
+            cost: 0,
+            color: 0,
+            val: 0,
         }
-    }
-    pub fn clear(&mut self){
-        self.tokugi = 0;
-        self.jumon = 0;
-        self.taisei = 0;
     }
 }
 
 #[derive(Clone, Serialize, Deserialize)]
-pub struct Group {
-    pub damage: usize,
-    pub taisei: usize, 
+pub struct MonstersLite {
+    pub monsters: Vec<MonsterLite>
 }
 
-impl Group{
+impl MonstersLite {
     pub fn new() -> Self {
-        Group{
-            damage: 0,
-            taisei: 0,    
+        MonstersLite {
+            monsters: Vec::new()
         }
     }
-    pub fn clear(&mut self){
-        self.damage = 0;
-        self.taisei = 0;
+    pub fn add_monster(&mut self, m: MonsterLite){
+        self.monsters.push(m);
     }
 }
+
+#[derive(Clone, Serialize, Deserialize)]
+pub struct CombiLite {
+    pub monsters: Vec<usize>,
+    pub cost: usize,
+    pub val: usize,
+}
+
+impl CombiLite{
+    pub fn new() -> Self {
+        CombiLite {
+            monsters:   Vec::new(),
+            cost:       0,
+            val:        0,
+        }
+    }
+    pub fn clear(&mut self) {
+        self.monsters = Vec::new();
+        self.cost = 0;
+        self.val = 0;
+    }
+
+    pub fn add_monster(&mut self, m: MonsterLite){
+        self.monsters.push(m.id);        
+        self.cost = self.cost + m.cost;
+        self.val = self.val + m.val;
+    }
+    
+}
+
+#[derive(Serialize, Deserialize)]
+pub struct CombisLite {
+    pub combis: Vec<CombiLite>,
+    pub num: usize
+}
+
+impl CombisLite {
+    pub fn new() -> Self {
+        CombisLite {
+            combis: Vec::new(),
+            num : 0
+        }
+    }
+    pub fn add_combi(&mut self, c: CombiLite){
+        self.combis.push(c);
+        self.num = self.combis.len();
+    }
+}
+
+// 以下、Liteじゃないやつ
 
 #[derive(Clone, Serialize, Deserialize)]
 pub struct Monster {
@@ -226,6 +270,14 @@ impl Combis {
     }
 }
 
+pub fn make_num_array_from_monsters_lite(m: &MonstersLite) -> Vec<usize>{
+    let mut out: Vec<usize> = Vec::new();
+    for monster in &m.monsters[..]{
+        out.push(monster.id);
+    }
+    out
+}
+
 pub fn make_num_array_from_monsters(m: &Monsters) -> Vec<usize>{
     let mut out: Vec<usize> = Vec::new();
     for monster in &m.monsters[..]{
@@ -243,6 +295,43 @@ pub fn make_num_array_from_color(m: &Monsters, color: &str) -> Vec<usize>{
         }
     }
     make_num_array_from_monsters(&color_list)
+}
+
+// usage make_num_array_from_color_lite(monstes,"黄赤")
+pub fn make_num_array_from_color_lite(m: &MonstersLite, color: &str) -> Vec<usize>{
+    let mut color_list = MonstersLite::new();
+    for monster in &m.monsters[..] {
+        let mut flag = false;
+        if monster.color == 1 { // 黄
+            if color == "黄" || color == "黄赤" || color == "黄青"  || color == "黄紫"  || color == "黄緑" {
+                flag = true;
+            }
+        }
+        if monster.color == 2 { // 赤
+            if color == "赤" || color == "黄赤" || color == "赤青"  || color == "赤紫"  || color == "赤緑" {
+                flag = true;
+            }
+        }
+        if monster.color == 4 { // 青
+            if color == "青" || color == "黄青" || color == "赤青"  || color == "青紫"  || color == "青緑" {
+                flag = true;
+            }
+        }
+        if monster.color == 8 { // 紫
+            if color == "紫" || color == "黄紫" || color == "赤紫"  || color == "青紫"  || color == "紫緑" {
+                flag = true;
+            }
+        }
+        if monster.color == 16 { // 緑
+            if color == "緑" || color == "黄緑" || color == "赤緑"  || color == "青緑"  || color == "紫緑" {
+                flag = true;
+            }
+        }
+        if flag == true {
+            color_list.add_monster(monster.clone());
+        }
+    }
+    make_num_array_from_monsters_lite(&color_list)
 }
 
 // usage make_num_array_from_color(monstes,"黄赤")

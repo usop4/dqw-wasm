@@ -12,6 +12,9 @@
       body {
         background-color: whitesmoke;
       }
+      [v-cloak] {
+        display: none;
+      }
       .container {
         background-color: white;
       }
@@ -37,7 +40,7 @@
     <div class="container">
       <h1>dqw match finder</h1>
 
-      <div id="app">
+      <div id="app" v-cloak>
         
         <div class="row mb-3">
 
@@ -73,32 +76,32 @@
                 <label class="form-check-label" for="j12">踊り子</label>
               </div>
               <div class="form-check">
-                <input value="レンジャー" v-model="job" class="form-check-input" type="radio" name="job" id="j6">
-                <label class="form-check-label" for="j6">レンジャー</label>
+                <input value="レンジャー" v-model="job" class="form-check-input" type="radio" name="job" id="j13">
+                <label class="form-check-label" for="j13">レンジャー</label>
               </div>
               <div class="form-check">
-                <input value="賢者" v-model="job" class="form-check-input" type="radio" name="job" id="j7">
-                <label class="form-check-label" for="j7">賢者</label>
+                <input value="賢者" v-model="job" class="form-check-input" type="radio" name="job" id="j14">
+                <label class="form-check-label" for="j14">賢者</label>
               </div>
               <div class="form-check">
-                <input value="バトルマスター" v-model="job" class="form-check-input" type="radio" name="job" id="j8">
-                <label class="form-check-label" for="j8">バトルマスター</label>
+                <input value="バトルマスター" v-model="job" class="form-check-input" type="radio" name="job" id="j15">
+                <label class="form-check-label" for="j15">バトルマスター</label>
               </div>
               <div class="form-check">
-                <input value="魔法戦士" v-model="job" class="form-check-input" type="radio" name="job" id="j9">
-                <label class="form-check-label" for="j9">魔法戦士</label>
+                <input value="魔法戦士" v-model="job" class="form-check-input" type="radio" name="job" id="j16">
+                <label class="form-check-label" for="j16">魔法戦士</label>
               </div>
               <div class="form-check">
-                <input value="パラディン" v-model="job" class="form-check-input" type="radio" name="job" id="j10">
-                <label class="form-check-label" for="j10">パラディン</label>
+                <input value="パラディン" v-model="job" class="form-check-input" type="radio" name="job" id="j17">
+                <label class="form-check-label" for="j17">パラディン</label>
               </div>
               <div class="form-check">
-                <input value="スパスタ" v-model="job" class="form-check-input" type="radio" name="job" id="j11">
-                <label class="form-check-label" for="j11">スパスタ</label>
+                <input value="スパスタ" v-model="job" class="form-check-input" type="radio" name="job" id="j18">
+                <label class="form-check-label" for="j18">スパスタ</label>
               </div>
               <div class="form-check">
-                <input value="海賊" v-model="job" class="form-check-input" type="radio" name="job" id="j12">
-                <label class="form-check-label" for="j12">海賊</label>
+                <input value="海賊" v-model="job" class="form-check-input" type="radio" name="job" id="j19">
+                <label class="form-check-label" for="j19">海賊</label>
               </div>
 
               <div>
@@ -115,10 +118,17 @@
               </div>
 
               <div>
-                <b-button size="sm" v-on:click="list_combis()">
+                <b-button size="sm" v-on:click="list_combis2()">
                   計算
                 </b-button>
               </div>
+
+              <div>
+                <b-button size="sm" v-on:click="list_combis3()">
+                  計算(高速)
+                </b-button>
+              </div>
+
 
             </div>
           </div>
@@ -180,7 +190,7 @@
           <b-modal id="modal-1">
             <li v-for="(monster,i) in monster_list">
               {{ monster }}
-              <b-button size="sm" v-on:click="remove_monster(i)">remove</b-button>
+              <b-button variant="light" size="sm" v-on:click="remove_monster(i)">remove</b-button>
             </li>
           </b-modal>
         </div>
@@ -214,10 +224,13 @@
       }
       const time = (val) => {
         console.time(val);
+        document.body.style.backgroundColor = "gray";
+        //document.querySelector('#app').__vue__.set_show(true);
       }
       const timeEnd = (val) => {
         console.timeEnd(val);
-        document.querySelector('#app').__vue__.set_show(false);
+        document.body.style.backgroundColor = "whitesmoke";
+        //document.querySelector('#app').__vue__.set_show(false);
       }
     </script>
 </body>

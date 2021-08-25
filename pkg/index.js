@@ -32,7 +32,7 @@ import * as mod from "./dqw_wasm.js";
         list_combis_auto: function(){
           return this.combis;
         },
-        async_list_combis:async function(){
+        list_combis2: function(){
           var param = {
             cost: parseInt(this.cost),
             job: this.job,
@@ -46,13 +46,19 @@ import * as mod from "./dqw_wasm.js";
           );
           this.combis = s.combis;
         },
-        list_combis:async function(val){
-          await this.set_show(true);
-          await this.async_list_combis();
-          this.set_show(false);
-        },
-        set_show:async function(val){
-          this.show = val;
+        list_combis3: function(){
+          var param = {
+            cost: parseInt(this.cost),
+            job: this.job,
+            param: this.param,
+            remove: this.remove,
+            combis_size: parseInt(this.combis_size)
+          };
+          let s = mod.return_all_combis3_csv(
+            this.csv,
+            param
+          );
+          this.combis = s.combis;
         },
         show_combis: function(n){
           this.monster_list = this.combis[n].name.split('\r\n').map(value => value);
