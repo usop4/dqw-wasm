@@ -2,7 +2,11 @@ use serde::{Serialize, Deserialize};
 
 use std::collections::HashMap;
 
-#[derive(Copy, Serialize, Deserialize)]
+/*
+高速計算用の軽量版structと組み合わせ計算
+*/
+
+#[derive(Clone, Copy, Serialize, Deserialize)]
 pub struct MonsterLite {
     pub id: usize,
     pub cost: usize,
@@ -85,7 +89,54 @@ impl CombisLite {
     }
 }
 
-// 以下、Liteじゃないやつ
+pub fn make_num_array_from_monsters_lite(m: &MonstersLite) -> Vec<usize>{
+    let mut out: Vec<usize> = Vec::new();
+    for monster in &m.monsters[..]{
+        out.push(monster.id);
+    }
+    out
+}
+
+// usage make_num_array_from_color_lite(monstes,"黄赤")
+pub fn make_num_array_from_color_lite(m: &MonstersLite, color: &str) -> Vec<usize>{
+    let mut color_list = MonstersLite::new();
+    for monster in &m.monsters[..] {
+        let mut flag = false;
+        if monster.color == 1 { // 黄
+            if color == "黄" || color == "黄赤" || color == "黄青"  || color == "黄紫"  || color == "黄緑" {
+                flag = true;
+            }
+        }
+        if monster.color == 2 { // 赤
+            if color == "赤" || color == "黄赤" || color == "赤青"  || color == "赤紫"  || color == "赤緑" {
+                flag = true;
+            }
+        }
+        if monster.color == 4 { // 青
+            if color == "青" || color == "黄青" || color == "赤青"  || color == "青紫"  || color == "青緑" {
+                flag = true;
+            }
+        }
+        if monster.color == 8 { // 紫
+            if color == "紫" || color == "黄紫" || color == "赤紫"  || color == "青紫"  || color == "紫緑" {
+                flag = true;
+            }
+        }
+        if monster.color == 16 { // 緑
+            if color == "緑" || color == "黄緑" || color == "赤緑"  || color == "青緑"  || color == "紫緑" {
+                flag = true;
+            }
+        }
+        if flag == true {
+            color_list.add_monster(monster.clone());
+        }
+    }
+    make_num_array_from_monsters_lite(&color_list)
+}
+
+/*
+最終出力用のstruct
+*/
 
 #[derive(Clone, Serialize, Deserialize)]
 pub struct Monster {
@@ -270,14 +321,6 @@ impl Combis {
     }
 }
 
-pub fn make_num_array_from_monsters_lite(m: &MonstersLite) -> Vec<usize>{
-    let mut out: Vec<usize> = Vec::new();
-    for monster in &m.monsters[..]{
-        out.push(monster.id);
-    }
-    out
-}
-
 pub fn make_num_array_from_monsters(m: &Monsters) -> Vec<usize>{
     let mut out: Vec<usize> = Vec::new();
     for monster in &m.monsters[..]{
@@ -295,43 +338,6 @@ pub fn make_num_array_from_color(m: &Monsters, color: &str) -> Vec<usize>{
         }
     }
     make_num_array_from_monsters(&color_list)
-}
-
-// usage make_num_array_from_color_lite(monstes,"黄赤")
-pub fn make_num_array_from_color_lite(m: &MonstersLite, color: &str) -> Vec<usize>{
-    let mut color_list = MonstersLite::new();
-    for monster in &m.monsters[..] {
-        let mut flag = false;
-        if monster.color == 1 { // 黄
-            if color == "黄" || color == "黄赤" || color == "黄青"  || color == "黄紫"  || color == "黄緑" {
-                flag = true;
-            }
-        }
-        if monster.color == 2 { // 赤
-            if color == "赤" || color == "黄赤" || color == "赤青"  || color == "赤紫"  || color == "赤緑" {
-                flag = true;
-            }
-        }
-        if monster.color == 4 { // 青
-            if color == "青" || color == "黄青" || color == "赤青"  || color == "青紫"  || color == "青緑" {
-                flag = true;
-            }
-        }
-        if monster.color == 8 { // 紫
-            if color == "紫" || color == "黄紫" || color == "赤紫"  || color == "青紫"  || color == "紫緑" {
-                flag = true;
-            }
-        }
-        if monster.color == 16 { // 緑
-            if color == "緑" || color == "黄緑" || color == "赤緑"  || color == "青緑"  || color == "紫緑" {
-                flag = true;
-            }
-        }
-        if flag == true {
-            color_list.add_monster(monster.clone());
-        }
-    }
-    make_num_array_from_monsters_lite(&color_list)
 }
 
 // usage make_num_array_from_color(monstes,"黄赤")
@@ -370,3 +376,4 @@ pub fn remove_array(array: Vec<usize>, remove_list: Vec<usize>) -> Vec<usize>{
     }
     out
 }
+

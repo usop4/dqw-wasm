@@ -19,8 +19,8 @@ pub fn initialize(){
 pub struct Option {
     pub cost: usize,
     pub job: String,
-    pub param: String,
-    pub remove: String,
+    pub param: String,          // どの順番で並べるか(cost,mp,power等)
+    pub remove: String,         // 対象外とするモンスター(空白区切り)
     pub combis_size: usize
 }
 
@@ -29,13 +29,10 @@ pub fn return_all_combis3_csv(monsters: &str, options: &JsValue) -> JsValue {
 
     time("return_all_combis3_csv");
 
+    // ブラウザから渡されたパラメータを分解
+
     let o: Option = options.into_serde().unwrap();
-
-    let mut m = MonstersLite::new();
-    let mut m_full = Monsters::new();
-    let mut r = csv::ReaderBuilder::new().delimiter(b',').from_reader(monsters.as_bytes());
-
-    let param_order:usize = match &*o.param {
+    let param_order:usize = match &*o.param {   // どの順番で並べるか→CSVファイルの何番目を読むか
         "cost" => 1,
         "hp" => 3,
         "mp" => 4,
@@ -47,12 +44,19 @@ pub fn return_all_combis3_csv(monsters: &str, options: &JsValue) -> JsValue {
         "skill" => 10,
         _ => 0,
     };
+    let removes: Vec<&str> = o.remove.split(' ').collect(); // 対象外とするモンスター
+
+    // monster.csvを読み込み
+
+    let mut m = MonstersLite::new();    // 上位n番を抽出するための軽量クラス
+    let mut m_full = Monsters::new();   // 最終出力用
+    let mut r = csv::ReaderBuilder::new().delimiter(b',').from_reader(monsters.as_bytes());
 
     let mut id :usize = 0;
     for record in r.records(){
         let record = record.unwrap();
         m.add_monster(
-            MonsterLite {
+            MonsterLite {               // 上位n番を抽出するための軽量クラス
                 id: id,
                 cost: record[1].parse().unwrap(),
                 color: color_to_num(&record[2]),
@@ -60,7 +64,7 @@ pub fn return_all_combis3_csv(monsters: &str, options: &JsValue) -> JsValue {
             }
         );
         m_full.add_monster(
-            Monster {
+            Monster {                   // 最終出力用
                 id: id,
                 name: record[0].to_string(),
                 cost: record[1].parse().unwrap(),
@@ -81,26 +85,17 @@ pub fn return_all_combis3_csv(monsters: &str, options: &JsValue) -> JsValue {
 
     log(&format!("monster:{:?}",id-1));
 
+    // 上位n番目を抽出するための組み合わせ(combis_lite)を生成
+
     let mut combis_lite = CombisLite::new();
     let mut combi_lite = CombiLite::new();
-
-    let mut remove_list : Vec<usize> = Vec::new();
 
     let colors = return_color_from_job(&o.job);
     let color: Vec<&str> = colors.split(',').collect();
 
     let list1 = make_num_array_from_monsters_lite(&m);
-
     for i1 in &list1 {
-        let mut counter = 0;
-        loop {
-            remove_list.push(counter);
-            if counter == *i1 {
-                break;
-            }
-            counter +=  1;
-        }
-
+        let mut remove_list: Vec<usize> = (0..*i1+1).collect();
         let mut list2 = make_num_array_from_color_lite(&m,color[0]);
         list2 = remove_array(list2,(*remove_list).to_vec());
         for i2 in &list2 {
@@ -140,16 +135,16 @@ pub fn return_all_combis3_csv(monsters: &str, options: &JsValue) -> JsValue {
             }
             combi_lite.clear();    
         }
-        remove_list.clear();
     }
+
+    log(&format!("size:{:?}",combis_lite.combis.len()));
+
+    // 組み合わせ(combis_lite)から上位を抽出し出力用の組み合わせ(out)を生成
 
     let mut max = Vec::new();
     for c in &combis_lite.combis {
         max.push(c.val)
     }
-
-    log(&format!("size:{:?}",max.len()));
-
     max.sort();
     max.dedup();
     max.reverse();
@@ -157,19 +152,14 @@ pub fn return_all_combis3_csv(monsters: &str, options: &JsValue) -> JsValue {
     let mut out = Combis::new();
     let mut combi = Combi::new();
 
-    let mut count = 0;
-    let mut remove_flag = 0;
-    let removes: Vec<&str> = o.remove.split(' ').collect();
-
-
-    'outer: for i in 0..max.len() {
+    for i in 0..max.len() {
         for c in &combis_lite.combis {
             if c.val == max[i] {
                 for id in c.monsters.clone() {
                     combi.add_monster(m_full.monsters[id].clone());
                 }
                 if o.remove.len() > 0 {
-                    remove_flag = 0;
+                    let mut remove_flag = 0;
                     for remove in &removes {     
                         if combi.name.contains(&*remove) {
                             remove_flag = 1;
@@ -178,18 +168,16 @@ pub fn return_all_combis3_csv(monsters: &str, options: &JsValue) -> JsValue {
                     if remove_flag == 0 {
                         combi.compress_effects();
                         out.add_combi(combi.clone());
-                        count += 1;
                     }
                 }else{
                     combi.compress_effects();
                     out.add_combi(combi.clone());
-                    count += 1;
                 }
                 combi.clear();
             }
-            if count >= o.combis_size {
-                break 'outer;
-            }
+        }
+        if out.combis.len() >= o.combis_size {
+            break;
         }
     }
     
@@ -198,6 +186,10 @@ pub fn return_all_combis3_csv(monsters: &str, options: &JsValue) -> JsValue {
 
 }
 
+/*
+全てのパラメータを足して処理が遅かったころのバージョン
+（計算結果の確認のため当面は残置）
+*/
 #[wasm_bindgen]
 pub fn return_all_combis2_csv(monsters: &str, options: &JsValue) -> JsValue {
 

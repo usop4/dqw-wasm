@@ -1,4 +1,4 @@
-# https://qiita.com/ne_no_usa/items/6d0a23769776aa61401f
+clear
 wasm-pack build --target web
 
 cd pkg
