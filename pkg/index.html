@@ -104,12 +104,12 @@
                 <label class="form-check-label" for="j19">海賊</label>
               </div>
 
-              <div>
+              <div class="my-1">
                 <label for="cost">コスト</label>
                 <b-form-input size="sm" id="cost" v-model="cost"></b-form-input>
               </div>
 
-              <div>
+              <div class="my-1">
                 <label for="combis_size">表示数</label>
                 <b-form-group>
                   <b-form-radio v-model="combis_size" value="5">5</b-form-radio>
@@ -117,19 +117,21 @@
                 </b-form-group>
               </div>
 
-<!--
               <div>
-                <b-button size="sm" v-on:click="list_combis2()">
-                  計算
+                <b-button class="my-1" size="sm" v-on:click="list_combis3()">
+                  計算(wasm高速)
                 </b-button>
               </div>
--->
               <div>
-                <b-button size="sm" v-on:click="list_combis3()">
-                  計算
+                <b-button class="my-1" size="sm" v-on:click="list_combis2()">
+                  計算(wasm低速)
                 </b-button>
               </div>
-
+              <div>
+                <b-button class="my-1" size="sm" v-on:click="list_combis_js()">
+                  計算(JS)
+                </b-button>
+              </div>
 
             </div>
           </div>
@@ -226,12 +228,10 @@
       const time = (val) => {
         console.time(val);
         document.body.style.backgroundColor = "gray";
-        //document.querySelector('#app').__vue__.set_show(true);
       }
       const timeEnd = (val) => {
         console.timeEnd(val);
         document.body.style.backgroundColor = "whitesmoke";
-        //document.querySelector('#app').__vue__.set_show(false);
       }
     </script>
 </body>

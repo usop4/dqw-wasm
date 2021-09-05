@@ -101,33 +101,19 @@ pub fn make_num_array_from_monsters_lite(m: &MonstersLite) -> Vec<usize>{
 pub fn make_num_array_from_color_lite(m: &MonstersLite, color: &str) -> Vec<usize>{
     let mut color_list = MonstersLite::new();
     for monster in &m.monsters[..] {
-        let mut flag = false;
-        if monster.color == 1 { // 黄
-            if color == "黄" || color == "黄赤" || color == "黄青"  || color == "黄紫"  || color == "黄緑" {
-                flag = true;
-            }
+        if monster.color == 1 && color.contains("黄"){
+            color_list.add_monster(monster.clone());
         }
-        if monster.color == 2 { // 赤
-            if color == "赤" || color == "黄赤" || color == "赤青"  || color == "赤紫"  || color == "赤緑" {
-                flag = true;
-            }
+        if monster.color == 2 && color.contains("赤"){
+            color_list.add_monster(monster.clone());
         }
-        if monster.color == 4 { // 青
-            if color == "青" || color == "黄青" || color == "赤青"  || color == "青紫"  || color == "青緑" {
-                flag = true;
-            }
+        if monster.color == 4 && color.contains("青"){
+            color_list.add_monster(monster.clone());
         }
-        if monster.color == 8 { // 紫
-            if color == "紫" || color == "黄紫" || color == "赤紫"  || color == "青紫"  || color == "紫緑" {
-                flag = true;
-            }
+        if monster.color == 8 && color.contains("紫"){
+            color_list.add_monster(monster.clone());
         }
-        if monster.color == 16 { // 緑
-            if color == "緑" || color == "黄緑" || color == "赤緑"  || color == "青緑"  || color == "紫緑" {
-                flag = true;
-            }
-        }
-        if flag == true {
+        if monster.color == 16 && color.contains("緑"){
             color_list.add_monster(monster.clone());
         }
     }
