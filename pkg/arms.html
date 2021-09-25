@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <title>dqw match finder / arm</title>
+
+    <link type="text/css" rel="stylesheet" href="//unpkg.com/bootstrap/dist/css/bootstrap.min.css" />
+    <link type="text/css" rel="stylesheet" href="//unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.min.css" />
+    <style>
+      body {
+        background-color: whitesmoke;
+      }
+      .container {
+        background-color: white;
+      }
+      table th{
+        position: -webkit-sticky;
+        position: sticky;
+        top: 0;
+        z-index: 1;
+        background-color: white;
+      }
+      .vertical {
+        -webkit-writing-mode: vertical-rl;
+        -ms-writing-mode: tb-rl;
+        writing-mode: vertical-rl;
+      }
+      .u-pre-wrap {
+        white-space: pre-wrap;
+      }
+    </style>
+  </head>
+  <body>
+
+    <div class="container">
+      <h1>dqw match finder</h1>
+
+      <div id="app" v-cloak>
+
+        <div class="row">
+          <div class="col m-1" style="background-color:whitesmoke;">
+            <b-form-select v-model="job1" :options="job_options" @change="match_arm" class="my-1"></b-form-select>
+          </div>
+          <div class="col m-1 " style="background-color:whitesmoke;">
+            <b-form-select v-model="job2" :options="job_options" @change="match_arm" class="my-1"></b-form-select>
+          </div>
+          <div class="col m-1" style="background-color:whitesmoke;">
+            <b-form-select v-model="job3" :options="job_options" @change="match_arm" class="my-1"></b-form-select>
+          </div>
+          <div class="col m-1" style="background-color:whitesmoke;">
+            <b-form-select v-model="job4" :options="job_options" @change="match_arm" class="my-1"></b-form-select>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col m-1" style="background-color:whitesmoke;">
+            <b-form-select v-model="z_tokugi1" :options="z_tokugi_options" @change="match_arm" class="my-1"></b-form-select>
+            <b-form-select v-model="z_jumon1" :options="z_jumon_options" @change="match_arm" class="my-1"></b-form-select>
+            <b-form-select v-model="z_taisei1" :options="z_taisei_options" @change="match_arm" class="my-1"></b-form-select>
+            <b-form-select v-model="k_damage1" :options="k_damage_options" @change="match_arm" class="my-1"></b-form-select>
+            <b-form-select v-model="k_taisei1" :options="k_taisei_options" @change="match_arm" class="my-1"></b-form-select>
+          </div>
+          <div class="col m-1" style="background-color:whitesmoke;">
+            <b-form-select v-model="z_tokugi2" :options="z_tokugi_options" @change="match_arm" class="my-1"></b-form-select>
+            <b-form-select v-model="z_jumon2" :options="z_jumon_options" @change="match_arm" class="my-1"></b-form-select>
+            <b-form-select v-model="z_taisei2" :options="z_taisei_options" @change="match_arm" class="my-1"></b-form-select>
+            <b-form-select v-model="k_damage2" :options="k_damage_options" @change="match_arm" class="my-1"></b-form-select>
+            <b-form-select v-model="k_taisei2" :options="k_taisei_options" @change="match_arm" class="my-1"></b-form-select>
+          </div>
+          <div class="col m-1" style="background-color:whitesmoke;">
+            <b-form-select v-model="z_tokugi3" :options="z_tokugi_options" @change="match_arm" class="my-1"></b-form-select>
+            <b-form-select v-model="z_jumon3" :options="z_jumon_options" @change="match_arm" class="my-1"></b-form-select>
+            <b-form-select v-model="z_taisei3" :options="z_taisei_options" @change="match_arm" class="my-1"></b-form-select>
+            <b-form-select v-model="k_damage3" :options="k_damage_options" @change="match_arm" class="my-1"></b-form-select>
+            <b-form-select v-model="k_taisei3" :options="k_taisei_options" @change="match_arm" class="my-1"></b-form-select>
+          </div>
+          <div class="col m-1" style="background-color:whitesmoke;">
+            <b-form-select v-model="z_tokugi4" :options="z_tokugi_options" @change="match_arm" class="my-1"></b-form-select>
+            <b-form-select v-model="z_jumon4" :options="z_jumon_options" @change="match_arm" class="my-1"></b-form-select>
+            <b-form-select v-model="z_taisei4" :options="z_taisei_options" @change="match_arm" class="my-1"></b-form-select>
+            <b-form-select v-model="k_damage4" :options="k_damage_options" @change="match_arm" class="my-1"></b-form-select>
+            <b-form-select v-model="k_taisei4" :options="k_taisei_options" @change="match_arm" class="my-1"></b-form-select>
+          </div>
+        </div>
+
+
+        <div class="row my-1">
+          <div class="col"><b-button block v-b-toggle.a1_1 variant="outline-secondary">{{ a1_1.name }}</b-button><b-collapse id="a1_1"><pre>{{ a1_1.desc }}</pre></b-collapse></div>
+          <div class="col"><b-button v-b-toggle.a2_1 variant="outline-secondary">{{ a2_1.name }}</b-button><b-collapse id="a2_1"><pre>{{ a2_1.desc }}</pre></b-collapse></div>
+          <div class="col"><b-button v-b-toggle.a3_1 variant="outline-secondary">{{ a3_1.name }}</b-button><b-collapse id="a3_1"><pre>{{ a3_1.desc }}</pre></b-collapse></div>
+          <div class="col"><b-button v-b-toggle.a4_1 variant="outline-secondary">{{ a4_1.name }}</b-button><b-collapse id="a4_1"><pre>{{ a4_1.desc }}</pre></b-collapse></div>
+        </div>
+
+        <div class="row my-1">
+          <div class="col"><b-button v-b-toggle.a1_2 variant="outline-secondary">{{ a1_2.name }}</b-button><b-collapse id="a1_2"><pre>{{ a1_2.desc }}</pre></b-collapse></div>
+          <div class="col"><b-button v-b-toggle.a2_2 variant="outline-secondary">{{ a2_2.name }}</b-button><b-collapse id="a2_2"><pre>{{ a2_2.desc }}</pre></b-collapse></div>
+          <div class="col"><b-button v-b-toggle.a3_2 variant="outline-secondary">{{ a3_2.name }}</b-button><b-collapse id="a3_2"><pre>{{ a3_2.desc }}</pre></b-collapse></div>
+          <div class="col"><b-button v-b-toggle.a4_2 variant="outline-secondary">{{ a4_2.name }}</b-button><b-collapse id="a4_2"><pre>{{ a4_2.desc }}</pre></b-collapse></div>
+        </div>
+
+        <div class="row my-1">
+          <div class="col"><b-button v-b-toggle.a1_3 variant="outline-secondary">{{ a1_3.name }}</b-button><b-collapse id="a1_3"><pre>{{ a1_3.desc }}</pre></b-collapse></div>
+          <div class="col"><b-button v-b-toggle.a2_3 variant="outline-secondary">{{ a2_3.name }}</b-button><b-collapse id="a2_3"><pre>{{ a2_3.desc }}</pre></b-collapse></div>
+          <div class="col"><b-button v-b-toggle.a3_3 variant="outline-secondary">{{ a3_3.name }}</b-button><b-collapse id="a3_3"><pre>{{ a3_3.desc }}</pre></b-collapse></div>
+          <div class="col"><b-button v-b-toggle.a4_3 variant="outline-secondary">{{ a4_3.name }}</b-button><b-collapse id="a4_3"><pre>{{ a4_3.desc }}</pre></b-collapse></div>
+        </div>
+
+        <div class="row my-1">
+          <div class="col"><b-button v-b-toggle.a1_4 variant="outline-secondary">{{ a1_4.name }}</b-button><b-collapse id="a1_4"><pre>{{ a1_4.desc }}</pre></b-collapse></div>
+          <div class="col"><b-button v-b-toggle.a2_4 variant="outline-secondary">{{ a2_4.name }}</b-button><b-collapse id="a2_4"><pre>{{ a2_4.desc }}</pre></b-collapse></div>
+          <div class="col"><b-button v-b-toggle.a3_4 variant="outline-secondary">{{ a3_4.name }}</b-button><b-collapse id="a3_4"><pre>{{ a3_4.desc }}</pre></b-collapse></div>
+          <div class="col"><b-button v-b-toggle.a4_4 variant="outline-secondary">{{ a4_4.name }}</b-button><b-collapse id="a4_4"><pre>{{ a4_4.desc }}</pre></b-collapse></div>
+        </div>
+
+        <div>
+          <b-button v-b-toggle.collapse-1 variant="outline-primary" size="sm">元データを編集</b-button>
+          <b-collapse id="collapse-1" class="mt-2">
+            <b-form-textarea
+              id="textarea"
+              v-model="csv"
+              placeholder="Enter something..."
+              rows="3"
+              max-rows="6"
+            ></b-form-textarea>
+          </b-collapse>
+        </div>  
+
+      </div><!-- end of app -->
+
+      <a href="https://github.com/usop4/dqw-wasm/">https://github.com/usop4/dqw-wasm/</a>
+    </div><!-- end of container-->
+
+    <script src="//unpkg.com/vue@latest/dist/vue.min.js"></script>
+    <script src="//unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.min.js"></script>
+    <script src="//unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue-icons.min.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="arms.js" type="module"></script>
+    <script>
+      const log = (val) => {
+        console.log(val);
+      }
+      const time = (val) => {
+        console.time(val);
+        document.body.style.backgroundColor = "gray";
+      }
+      const timeEnd = (val) => {
+        console.timeEnd(val);
+        document.body.style.backgroundColor = "whitesmoke";
+      }
+    </script>
+</body>
+</html>

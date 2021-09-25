@@ -1,11 +1,13 @@
 pub mod monster;
 pub mod job;
+pub mod arm;
 
 use wasm_bindgen::prelude::*;
 use serde::{Serialize, Deserialize};
 
 use crate::monster::*;
 use crate::job::*;
+use crate::arm::*;
 
 extern crate console_error_panic_hook;
 use std::panic;
@@ -13,6 +15,88 @@ use std::panic;
 #[wasm_bindgen(start)]
 pub fn initialize(){
     panic::set_hook(Box::new(console_error_panic_hook::hook));
+}
+
+#[derive(Clone, Serialize, Deserialize)]
+pub struct ArmOption {
+    pub job: Vec<String>,
+    pub z_tokugi: Vec<String>,
+    pub z_jumon: Vec<String>,
+    pub z_taisei: Vec<String>,
+    pub k_taisei: Vec<String>,
+    pub k_damage: Vec<String>,
+}
+
+#[wasm_bindgen]
+pub fn return_matched_arm(arms: &str, options: &JsValue) -> JsValue {
+
+    time("return_matched_arm");
+
+    let o: ArmOption = options.into_serde().unwrap();
+
+    let mut a = Arms::new();
+    a.add_arm(Arm{id:0,parts:"".to_string(),name:"-".to_string(),desc:"".to_string()});
+
+    let mut r = csv::ReaderBuilder::new().delimiter(b',').from_reader(arms.as_bytes());
+    let mut id :usize = 1;
+    for record in r.records(){
+        let record = record.unwrap();
+        a.add_arm(
+            Arm {
+                id: id,
+                parts: record[0].to_string(),
+                name: record[1].to_string(),
+                desc: record[2].to_string(),
+            }
+        );
+        id = id + 1;
+    }
+
+    let mut out = Arms::new();
+
+    let parts = vec!["盾","頭","上","下"];
+    let mut max: [ [usize;4];4]  = [ [0;4];4];
+    let mut max_weight: [ [usize;4];4]  = [ [0;4];4];
+    for i in 0..4 {
+        // 人ごとのパラメータを整理
+        let mut seed: Vec<String> = Vec::new();
+        if o.z_tokugi[i].len() > 0 {
+            seed.push(o.z_tokugi[i].clone()+"属性ダメージ");
+            seed.push(o.z_tokugi[i].clone()+"属性斬撃・体技ダメージ");
+            seed.push("スキルの斬撃・体技ダメージ".to_string());
+        }
+        if o.z_jumon[i].len() > 0 {
+            seed.push(o.z_jumon[i].clone()+"属性ダメージ");
+            seed.push(o.z_jumon[i].clone()+"属性じゅもんダメージ");
+            seed.push("じゅもんダメージ".to_string());
+        }
+        if o.z_taisei[i].len() > 0 {
+            seed.push(o.z_tokugi[i].clone()+"属性耐性");
+        }
+        if o.k_damage[i].len() > 0 {
+            seed.push(o.k_damage[i].clone()+"系へのダメージ");
+        }
+        if o.k_taisei[i].len() > 0 {
+            seed.push(o.k_taisei[i].clone()+"系への耐性");
+        }
+
+        // 武器ごとに重みを計算
+        for j in 0..4 {
+            let mut weight = 0;
+            for arm in &a.pickup_parts(parts[j]).arms {
+                weight = weight + arm.clone().weight(seed.clone(),o.job[i].clone());
+                if weight > max_weight[i][j] {
+                    max[i][j] = arm.id;
+                    max_weight[i][j] = weight;
+                }
+            }
+            out.add_arm(a.arms[max[i][j]].clone());
+        }
+    }
+
+    timeEnd("return_matched_arm");
+
+    JsValue::from_serde(&out).unwrap()
 }
 
 #[derive(Clone, Serialize, Deserialize)]

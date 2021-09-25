@@ -122,6 +122,22 @@ function addBorrowedObject(obj) {
     return stack_pointer;
 }
 /**
+* @param {string} arms
+* @param {any} options
+* @returns {any}
+*/
+export function return_matched_arm(arms, options) {
+    try {
+        var ptr0 = passStringToWasm0(arms, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
+        var len0 = WASM_VECTOR_LEN;
+        var ret = wasm.return_matched_arm(ptr0, len0, addBorrowedObject(options));
+        return takeObject(ret);
+    } finally {
+        heap[stack_pointer++] = undefined;
+    }
+}
+
+/**
 * @param {string} monsters
 * @param {any} options
 * @returns {any}
@@ -201,11 +217,11 @@ async function init(input) {
         getInt32Memory0()[arg0 / 4 + 1] = len0;
         getInt32Memory0()[arg0 / 4 + 0] = ptr0;
     };
-    imports.wbg.__wbg_log_9979550b4a39d327 = function(arg0, arg1) {
-        log(getStringFromWasm0(arg0, arg1));
-    };
     imports.wbg.__wbg_timeEnd_9b9733f91925e2fc = function(arg0, arg1) {
         timeEnd(getStringFromWasm0(arg0, arg1));
+    };
+    imports.wbg.__wbg_log_9979550b4a39d327 = function(arg0, arg1) {
+        log(getStringFromWasm0(arg0, arg1));
     };
     imports.wbg.__wbindgen_json_parse = function(arg0, arg1) {
         var ret = JSON.parse(getStringFromWasm0(arg0, arg1));
