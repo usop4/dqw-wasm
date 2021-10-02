@@ -179,7 +179,8 @@ pub fn return_all_combis3_csv(monsters: &str, options: &JsValue) -> JsValue {
 
     let list1 = make_num_array_from_monsters_lite(&m);
     for i1 in &list1 {
-        let mut remove_list: Vec<usize> = (0..*i1+1).collect();
+        //let mut remove_list: Vec<usize> = (0..*i1+1).collect();
+        let mut remove_list: Vec<usize> = vec![*i1];
         let mut list2 = make_num_array_from_color_lite(&m,color[0]);
         list2 = remove_array(list2,(*remove_list).to_vec());
         for i2 in &list2 {
