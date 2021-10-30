@@ -316,10 +316,11 @@ pub fn return_all_combis2_csv(monsters: &str, options: &JsValue) -> JsValue {
     let colors = return_color_from_job(&o.job);
     let color: Vec<&str> = colors.split(',').collect();
 
-    let mut remove_list : Vec<usize> = Vec::new();
     let list1 = make_num_array_from_monsters(&m);
 
     for i1 in &list1 {
+        let mut remove_list : Vec<usize> = vec![*i1];
+        /*
         let mut counter = 0;
         loop {
             remove_list.push(counter);
@@ -328,6 +329,7 @@ pub fn return_all_combis2_csv(monsters: &str, options: &JsValue) -> JsValue {
             }
             counter +=  1;
         }
+        */
         let mut list2 = make_num_array_from_color2(&m,color[0]);
         list2 = remove_array(list2,(*remove_list).to_vec());
         for i2 in &list2 {
