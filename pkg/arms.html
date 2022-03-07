@@ -56,38 +56,105 @@
 
         <div class="row">
           <div class="col m-1" style="background-color:whitesmoke;">
-            <b-form-select v-model="z_tokugi1" :options="z_tokugi_options" @change="match_arm" class="my-1"></b-form-select>
-            <b-form-select v-model="z_jumon1" :options="z_jumon_options" @change="match_arm" class="my-1"></b-form-select>
-            <b-form-select v-model="z_taisei1" :options="z_taisei_options" @change="match_arm" class="my-1"></b-form-select>
-            <b-form-select v-model="k_damage1" :options="k_damage_options" @change="match_arm" class="my-1"></b-form-select>
-            <b-form-select v-model="k_taisei1" :options="k_taisei_options" @change="match_arm" class="my-1"></b-form-select>
+            <div><b-form-select v-model="z_tokugi1" :options="z_tokugi_options" @change="match_arm" class="my-1"></b-form-select></div>
+            <div><b-form-select v-model="z_jumon1" :options="z_jumon_options" @change="match_arm" class="my-1"></b-form-select></div>
+            <div><b-form-select v-model="z_taisei1" :options="z_taisei_options" @change="match_arm" class="my-1"></b-form-select></div>
+            <div><b-form-select v-model="k_damage1" :options="k_damage_options" @change="match_arm" class="my-1"></b-form-select></div>
+            <div><b-form-select v-model="k_taisei1" :options="k_taisei_options" @change="match_arm" class="my-1"></b-form-select></div>
           </div>
           <div class="col m-1" style="background-color:whitesmoke;">
-            <b-form-select v-model="z_tokugi2" :options="z_tokugi_options" @change="match_arm" class="my-1"></b-form-select>
-            <b-form-select v-model="z_jumon2" :options="z_jumon_options" @change="match_arm" class="my-1"></b-form-select>
-            <b-form-select v-model="z_taisei2" :options="z_taisei_options" @change="match_arm" class="my-1"></b-form-select>
-            <b-form-select v-model="k_damage2" :options="k_damage_options" @change="match_arm" class="my-1"></b-form-select>
-            <b-form-select v-model="k_taisei2" :options="k_taisei_options" @change="match_arm" class="my-1"></b-form-select>
+            <div><b-form-select v-model="z_tokugi2" :options="z_tokugi_options" @change="match_arm" class="my-1"></b-form-select></div>
+            <div><b-form-select v-model="z_jumon2" :options="z_jumon_options" @change="match_arm" class="my-1"></b-form-select></div>
+            <div><b-form-select v-model="z_taisei2" :options="z_taisei_options" @change="match_arm" class="my-1"></b-form-select></div>
+            <div><b-form-select v-model="k_damage2" :options="k_damage_options" @change="match_arm" class="my-1"></b-form-select></div>
+            <div><b-form-select v-model="k_taisei2" :options="k_taisei_options" @change="match_arm" class="my-1"></b-form-select></div>
           </div>
           <div class="col m-1" style="background-color:whitesmoke;">
-            <b-form-select v-model="z_tokugi3" :options="z_tokugi_options" @change="match_arm" class="my-1"></b-form-select>
-            <b-form-select v-model="z_jumon3" :options="z_jumon_options" @change="match_arm" class="my-1"></b-form-select>
-            <b-form-select v-model="z_taisei3" :options="z_taisei_options" @change="match_arm" class="my-1"></b-form-select>
-            <b-form-select v-model="k_damage3" :options="k_damage_options" @change="match_arm" class="my-1"></b-form-select>
-            <b-form-select v-model="k_taisei3" :options="k_taisei_options" @change="match_arm" class="my-1"></b-form-select>
+            <div><b-form-select v-model="z_tokugi3" :options="z_tokugi_options" @change="match_arm" class="my-1"></b-form-select></div>
+            <div><b-form-select v-model="z_jumon3" :options="z_jumon_options" @change="match_arm" class="my-1"></b-form-select></div>
+            <div><b-form-select v-model="z_taisei3" :options="z_taisei_options" @change="match_arm" class="my-1"></b-form-select></div>
+            <div><b-form-select v-model="k_damage3" :options="k_damage_options" @change="match_arm" class="my-1"></b-form-select></div>
+            <div><b-form-select v-model="k_taisei3" :options="k_taisei_options" @change="match_arm" class="my-1"></b-form-select></div>
           </div>
           <div class="col m-1" style="background-color:whitesmoke;">
-            <b-form-select v-model="z_tokugi4" :options="z_tokugi_options" @change="match_arm" class="my-1"></b-form-select>
-            <b-form-select v-model="z_jumon4" :options="z_jumon_options" @change="match_arm" class="my-1"></b-form-select>
-            <b-form-select v-model="z_taisei4" :options="z_taisei_options" @change="match_arm" class="my-1"></b-form-select>
-            <b-form-select v-model="k_damage4" :options="k_damage_options" @change="match_arm" class="my-1"></b-form-select>
-            <b-form-select v-model="k_taisei4" :options="k_taisei_options" @change="match_arm" class="my-1"></b-form-select>
+            <div><b-form-select v-model="z_tokugi4" :options="z_tokugi_options" @change="match_arm" class="my-1"></b-form-select></div>
+            <div><b-form-select v-model="z_jumon4" :options="z_jumon_options" @change="match_arm" class="my-1"></b-form-select></div>
+            <div><b-form-select v-model="z_taisei4" :options="z_taisei_options" @change="match_arm" class="my-1"></b-form-select></div>
+            <div><b-form-select v-model="k_damage4" :options="k_damage_options" @change="match_arm" class="my-1"></b-form-select></div>
+            <div><b-form-select v-model="k_taisei4" :options="k_taisei_options" @change="match_arm" class="my-1"></b-form-select></div>
           </div>
         </div>
 
 
         <div class="row my-1">
-          <div class="col"><b-button block v-b-toggle.a1_1 variant="outline-secondary">{{ a1_1.name }}</b-button><b-collapse id="a1_1"><pre>{{ a1_1.desc }}</pre></b-collapse></div>
+          <div class="col">
+            <div class="row">
+              <div class="col"><b-button variant="outline-secondary">-</b-button></div>
+              <div class="col"><b-button v-b-toggle.a1_atama variant="outline-secondary">{{ a1_atama.name }}</b-button><b-collapse id="a1_atama"><pre>{{ a1_atama.desc }}</pre></b-collapse></div>
+<!--
+              <div class="col"><b-button v-b-popover.hover.top='{{ a1_atama.desc }}'>{{ a1_atama.name }}</b-button></div>
+-->
+          </div>
+            <div class="row">
+              <div class="col"><b-button v-b-toggle.a1_tate variant="outline-secondary">{{ a1_tate.name }}</b-button><b-collapse id="a1_tate"><pre>{{ a1_tate.desc }}</pre></b-collapse></div>
+              <div class="col"><b-button v-b-toggle.a1_ue variant="outline-secondary">{{ a1_ue.name }}</b-button><b-collapse id="a1_ue"><pre>{{ a1_ue.desc }}</pre></b-collapse></div>
+            </div>
+            <div class="row">
+              <div class="col"><b-button variant="outline-secondary">-</b-button></div>
+              <div class="col"><b-button v-b-toggle.a1_shita variant="outline-secondary">{{ a1_shita.name }}</b-button><b-collapse id="a1_shita"><pre>{{ a1_shita.desc }}</pre></b-collapse></div>
+            </div>
+          </div>
+
+          <div class="col">
+            <div class="row">
+              <div class="col"><b-button variant="outline-secondary">-</b-button></div>
+              <div class="col"><b-button v-b-toggle.a2_atama variant="outline-secondary">{{ a2_atama.name }}</b-button><b-collapse id="a2_atama"><pre>{{ a2_atama.desc }}</pre></b-collapse></div>
+            </div>
+            <div class="row">
+              <div class="col"><b-button v-b-toggle.a2_tate variant="outline-secondary">{{ a2_tate.name }}</b-button><b-collapse id="a2_tate"><pre>{{ a2_tate.desc }}</pre></b-collapse></div>
+              <div class="col"><b-button v-b-toggle.a2_ue variant="outline-secondary">{{ a2_ue.name }}</b-button><b-collapse id="a2_ue"><pre>{{ a2_ue.desc }}</pre></b-collapse></div>
+            </div>
+            <div class="row">
+              <div class="col"><b-button variant="outline-secondary">-</b-button></div>
+              <div class="col"><b-button v-b-toggle.a2_shita variant="outline-secondary">{{ a2_shita.name }}</b-button><b-collapse id="a2_shita"><pre>{{ a2_shita.desc }}</pre></b-collapse></div>
+            </div>
+          </div>
+
+          <div class="col">
+            <div class="row">
+              <div class="col"><b-button variant="outline-secondary">-</b-button></div>
+              <div class="col"><b-button v-b-toggle.a3_atama variant="outline-secondary">{{ a3_atama.name }}</b-button><b-collapse id="a3_atama"><pre>{{ a3_atama.desc }}</pre></b-collapse></div>
+            </div>
+            <div class="row">
+              <div class="col"><b-button v-b-toggle.a3_tate variant="outline-secondary">{{ a3_tate.name }}</b-button><b-collapse id="a3_tate"><pre>{{ a3_tate.desc }}</pre></b-collapse></div>
+              <div class="col"><b-button v-b-toggle.a3_ue variant="outline-secondary">{{ a3_ue.name }}</b-button><b-collapse id="a3_ue"><pre>{{ a3_ue.desc }}</pre></b-collapse></div>
+            </div>
+            <div class="row">
+              <div class="col"><b-button variant="outline-secondary">-</b-button></div>
+              <div class="col"><b-button v-b-toggle.a3_shita variant="outline-secondary">{{ a3_shita.name }}</b-button><b-collapse id="a3_shita"><pre>{{ a3_shita.desc }}</pre></b-collapse></div>
+            </div>
+          </div>
+
+          <div class="col">
+            <div class="row">
+              <div class="col"><b-button variant="outline-secondary">-</b-button></div>
+              <div class="col"><b-button v-b-toggle.a4_atama variant="outline-secondary">{{ a4_atama.name }}</b-button><b-collapse id="a4_atama"><pre>{{ a4_atama.desc }}</pre></b-collapse></div>
+            </div>
+            <div class="row">
+              <div class="col"><b-button v-b-toggle.a4_tate variant="outline-secondary">{{ a4_tate.name }}</b-button><b-collapse id="a4_tate"><pre>{{ a4_tate.desc }}</pre></b-collapse></div>
+              <div class="col"><b-button v-b-toggle.a4_ue variant="outline-secondary">{{ a4_ue.name }}</b-button><b-collapse id="a4_ue"><pre>{{ a4_ue.desc }}</pre></b-collapse></div>
+            </div>
+            <div class="row">
+              <div class="col"><b-button variant="outline-secondary">-</b-button></div>
+              <div class="col"><b-button v-b-toggle.a4_shita variant="outline-secondary">{{ a4_shita.name }}</b-button><b-collapse id="a4_shita"><pre>{{ a4_shita.desc }}</pre></b-collapse></div>
+            </div>
+          </div>
+        </div>
+
+
+<!--
+        <div class="row my-1">
+          <div class="col"><b-button variant="outline-secondary">-</b-button></div>
           <div class="col"><b-button v-b-toggle.a2_1 variant="outline-secondary">{{ a2_1.name }}</b-button><b-collapse id="a2_1"><pre>{{ a2_1.desc }}</pre></b-collapse></div>
           <div class="col"><b-button v-b-toggle.a3_1 variant="outline-secondary">{{ a3_1.name }}</b-button><b-collapse id="a3_1"><pre>{{ a3_1.desc }}</pre></b-collapse></div>
           <div class="col"><b-button v-b-toggle.a4_1 variant="outline-secondary">{{ a4_1.name }}</b-button><b-collapse id="a4_1"><pre>{{ a4_1.desc }}</pre></b-collapse></div>
@@ -113,7 +180,7 @@
           <div class="col"><b-button v-b-toggle.a3_4 variant="outline-secondary">{{ a3_4.name }}</b-button><b-collapse id="a3_4"><pre>{{ a3_4.desc }}</pre></b-collapse></div>
           <div class="col"><b-button v-b-toggle.a4_4 variant="outline-secondary">{{ a4_4.name }}</b-button><b-collapse id="a4_4"><pre>{{ a4_4.desc }}</pre></b-collapse></div>
         </div>
-
+-->          
         <div>
           <b-button v-b-toggle.collapse-1 variant="outline-primary" size="sm">元データを編集</b-button>
           <b-collapse id="collapse-1" class="mt-2">

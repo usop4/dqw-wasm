@@ -108,22 +108,22 @@ import * as mod from "./dqw_wasm.js";
           {value: '水',text:'水系ダメージ'},
         ],
 
-        a1_1: {name:"",desc:""},
-        a1_2: {name:"",desc:""},
-        a1_3: {name:"",desc:""},
-        a1_4: {name:"",desc:""},
-        a2_1: {name:"",desc:""},
-        a2_2: {name:"",desc:""},
-        a2_3: {name:"",desc:""},
-        a2_4: {name:"",desc:""},
-        a3_1: {name:"",desc:""},
-        a3_2: {name:"",desc:""},
-        a3_3: {name:"",desc:""},
-        a3_4: {name:"",desc:""},
-        a4_1: {name:"",desc:""},
-        a4_2: {name:"",desc:""},
-        a4_3: {name:"",desc:""},
-        a4_4: {name:"",desc:""},
+        a1_tate: {name:"",desc:""},
+        a1_atama: {name:"",desc:""},
+        a1_ue: {name:"",desc:""},
+        a1_shita: {name:"",desc:""},
+        a2_tate: {name:"",desc:""},
+        a2_atama: {name:"",desc:""},
+        a2_ue: {name:"",desc:""},
+        a2_shita: {name:"",desc:""},
+        a3_tate: {name:"",desc:""},
+        a3_atama: {name:"",desc:""},
+        a3_ue: {name:"",desc:""},
+        a3_shita: {name:"",desc:""},
+        a4_tate: {name:"",desc:""},
+        a4_atama: {name:"",desc:""},
+        a4_ue: {name:"",desc:""},
+        a4_shita: {name:"",desc:""},
 
       },
       mounted: function(){
@@ -152,38 +152,45 @@ import * as mod from "./dqw_wasm.js";
             this.csv,
             param
           );
-          this.a1_1 = s.arms[0];
-          this.a1_2 = s.arms[1];
-          this.a1_3 = s.arms[2];
-          this.a1_4 = s.arms[3];
-          this.a2_1 = s.arms[4];
-          this.a2_2 = s.arms[5];
-          this.a2_3 = s.arms[6];
-          this.a2_4 = s.arms[7];
-          this.a3_1 = s.arms[8];
-          this.a3_2 = s.arms[9];
-          this.a3_3 = s.arms[10];
-          this.a3_4 = s.arms[11];
-          this.a4_1 = s.arms[12];
-          this.a4_2 = s.arms[13];
-          this.a4_3 = s.arms[14];
-          this.a4_4 = s.arms[15];
-          this.a1_1.desc = this.a1_1.desc.replaceAll(' ','\r\n')
-          this.a1_2.desc = this.a1_2.desc.replaceAll(' ','\r\n')
-          this.a1_3.desc = this.a1_3.desc.replaceAll(' ','\r\n')
-          this.a1_4.desc = this.a1_4.desc.replaceAll(' ','\r\n')
-          this.a2_1.desc = this.a2_1.desc.replaceAll(' ','\r\n')
-          this.a2_2.desc = this.a2_2.desc.replaceAll(' ','\r\n')
-          this.a2_3.desc = this.a2_3.desc.replaceAll(' ','\r\n')
-          this.a2_4.desc = this.a2_4.desc.replaceAll(' ','\r\n')
-          this.a3_1.desc = this.a3_1.desc.replaceAll(' ','\r\n')
-          this.a3_2.desc = this.a3_2.desc.replaceAll(' ','\r\n')
-          this.a3_3.desc = this.a3_3.desc.replaceAll(' ','\r\n')
-          this.a3_4.desc = this.a3_4.desc.replaceAll(' ','\r\n')
-          this.a4_1.desc = this.a4_1.desc.replaceAll(' ','\r\n')
-          this.a4_2.desc = this.a4_2.desc.replaceAll(' ','\r\n')
-          this.a4_3.desc = this.a4_3.desc.replaceAll(' ','\r\n')
-          this.a4_4.desc = this.a4_4.desc.replaceAll(' ','\r\n')
+          this.a1_tate = s.arms[0];
+          this.a1_atama = s.arms[1];
+          this.a1_ue = s.arms[2];
+          this.a1_shita = s.arms[3];
+
+          this.a2_tate = s.arms[4];
+          this.a2_atama = s.arms[5];
+          this.a2_ue = s.arms[6];
+          this.a2_shita = s.arms[7];
+
+          this.a3_tate = s.arms[8];
+          this.a3_atama = s.arms[9];
+          this.a3_ue = s.arms[10];
+          this.a3_shita = s.arms[11];
+
+          this.a4_tate = s.arms[12];
+          this.a4_atama = s.arms[13];
+          this.a4_ue = s.arms[14];
+          this.a4_shita = s.arms[15];
+
+          this.a1_tate.desc = this.a1_tate.desc.replaceAll(' ','\r\n')
+          this.a1_atama.desc = this.a1_atama.desc.replaceAll(' ','\r\n')
+          this.a1_ue.desc = this.a1_ue.desc.replaceAll(' ','\r\n')
+          this.a1_shita.desc = this.a1_shita.desc.replaceAll(' ','\r\n')
+
+          this.a2_tate.desc = this.a2_tate.desc.replaceAll(' ','\r\n')
+          this.a2_atama.desc = this.a2_atama.desc.replaceAll(' ','\r\n')
+          this.a2_ue.desc = this.a2_ue.desc.replaceAll(' ','\r\n')
+          this.a2_shita.desc = this.a2_shita.desc.replaceAll(' ','\r\n')
+
+          this.a3_tate.desc = this.a3_tate.desc.replaceAll(' ','\r\n')
+          this.a3_atama.desc = this.a3_atama.desc.replaceAll(' ','\r\n')
+          this.a3_ue.desc = this.a3_ue.desc.replaceAll(' ','\r\n')
+          this.a3_shita.desc = this.a3_shita.desc.replaceAll(' ','\r\n')
+          
+          this.a4_tate.desc = this.a4_tate.desc.replaceAll(' ','\r\n')
+          this.a4_atama.desc = this.a4_atama.desc.replaceAll(' ','\r\n')
+          this.a4_ue.desc = this.a4_ue.desc.replaceAll(' ','\r\n')
+          this.a4_shita.desc = this.a4_shita.desc.replaceAll(' ','\r\n')
         },
       } // ここまでmethods
     })
